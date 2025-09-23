@@ -1,0 +1,63 @@
+﻿@model Cliente
+@{
+    ViewBag.Title = "Novo Cliente";
+}
+
+<h2>Novo Cliente</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div>
+        @Html.LabelFor(m => m.Nome)
+        @Html.TextBoxFor(m => m.Nome)
+    </div>
+    <div>
+        @Html.LabelFor(m => m.Sexo)
+        @Html.DropDownListFor(m => m.Sexo, new SelectList(new[] { "Masculino", "Feminino", "Outro" }))
+    </div>
+    <div>
+        @Html.LabelFor(m => m.Endereco)
+        @Html.TextBoxFor(m => m.Endereco)
+    </div>
+    <div class="form-group">
+        <label class="control-label col-md-2">Telefone</label>
+        <div class="col-md-10">
+            <div id="telefonesContainer">
+                <div class="telefoneItem">
+                    @Html.TextBoxFor(model => model.Telefones[0].Numero, new { @class = "form-control", placeholder = "Número do telefone" })
+                    <button type="button" class="btn btn-danger removeTelefone">Remover</button>
+                </div>
+            </div>
+            <button type="button" class="btn btn-success" id="addTelefone">Adicionar Telefone</button>
+        </div>
+    </div>
+    <button type="submit">Salvar</button>
+}
+
+
+
+@section Scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var telefoneIndex = 1;
+
+            // Adicionar novo telefone
+            $('#addTelefone').click(function () {
+                var telefoneHtml = `
+                    <div class="telefoneItem">
+                        <input class="form-control" name="Telefone[` + telefoneIndex + `].Numero" placeholder="Número do telefone" type="text">
+                        <button type="button" class="btn btn-danger removeTelefone">Remover</button>
+                    </div>
+                `;
+                $('#telefonesContainer').append(telefoneHtml);
+                telefoneIndex++;
+            });
+
+            // Remover telefone
+            $(document).on('click', '.removeTelefone', function () {
+                $(this).closest('.telefoneItem').remove();
+            });
+        });
+    </script>
+}

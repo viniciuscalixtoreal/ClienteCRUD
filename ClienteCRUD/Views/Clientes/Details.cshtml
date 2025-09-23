@@ -1,0 +1,32 @@
+﻿@model Cliente
+@{
+    ViewBag.Title = "Detalhes";
+}
+
+<h2>Detalhes do Cliente</h2>
+
+<div>
+    <h4>Cliente</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>Id</dt>
+        <dd>@Model.Id</dd>
+        <dt>Nome</dt>
+        <dd>@Model.Nome</dd>
+        <dt>Sexo</dt>
+        <dd>@Model.Sexo</dd>
+        <dt>Endereço</dt>
+        <dd>@Model.Endereco</dd>
+        @if (Model.Telefones.Any())
+        {
+            <dt>Telefone</dt>
+            @foreach (var item in Model.Telefones)
+            {
+                <dd>@item.Numero</dd>
+                <dd>@item.Ativo</dd>
+            }
+        }        
+    </dl>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Editar</a> |
+    <a asp-action="Index">Voltar</a>
+</div>

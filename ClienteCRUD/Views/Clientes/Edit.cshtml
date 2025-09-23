@@ -1,0 +1,120 @@
+﻿@model Cliente
+@{
+    ViewBag.Title = "Editar Cliente";
+}
+
+<h2>Editar Cliente</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.Id)
+    <div>
+        @Html.LabelFor(m => m.Nome)
+        @Html.TextBoxFor(m => m.Nome)
+    </div>
+    <div>
+        @Html.LabelFor(m => m.Sexo)
+        @Html.DropDownListFor(m => m.Sexo, new SelectList(new[] { "Masculino", "Feminino", "Outro" }, Model.Sexo))
+    </div>
+    <div>
+        @Html.LabelFor(m => m.Endereco)
+        @Html.TextBoxFor(m => m.Endereco)
+    </div>
+    @if(Model.Telefones.Any())
+    {
+        <div class="form-group">
+            <label class="control-label col-md-2">Telefone</label>
+            <div class="col-md-10">
+                <div id="telefonesContainer">
+                    <div class="telefoneItem">
+                        @Html.TextBoxFor(model => model.Telefones[0].Numero, new { @class = "form-control", placeholder = "Número do telefone" })
+                        <button type="button" class="btn btn-danger removeTelefone">Remover</button>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-success" id="addTelefone">Adicionar Telefone</button>
+            </div>
+        </div>
+    }
+}
+
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="Edit">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="Id" />
+                <div class="form-group">
+                    <label asp-for="Nome" class="control-label"></label>
+                    <input asp-for="Nome" class="form-control" />
+                    <span asp-validation-for="Nome" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Sexo" class="control-label"></label>
+                    @* <select asp-for="Sexo" asp-items="@(new SelectList(Model.Sexo, "Masculino", "Feminino", "Outro"))" class="form-control" /> *@
+                    <select asp-for="Sexo" class="form-control" asp-items="@(new SelectList(new List<string> { "Masculino", "Feminino", "Outro" }))" />
+                    <span asp-validation-for="Sexo" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Sexo" class="control-label"></label>
+                    <select asp-for="Sexo" class="form-control" asp-items="@(new SelectList(new List<string> { "Masculino", "Feminino", "Outro" }))"></select>
+                    <span asp-validation-for="Sexo" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Endereco" class="control-label"></label>
+                    <input asp-for="Endereco" class="form-control" />
+                    <span asp-validation-for="Endereco" class="text-danger"></span>
+                </div>
+                
+                @if (Model.Telefones.Any())
+                {
+                    <div class="form-group">
+                        <label class="control-label col-md-2">Telefone</label>
+                        <div class="col-md-10">
+                            <div id="telefonesContainer">
+                                <div class="telefoneItem">
+                                    @Html.TextBoxFor(model => model.Telefones[0].Numero, new { @class = "form-control", placeholder = "Número do telefone" })
+                                    <button type="button" class="btn btn-danger removeTelefone">Remover</button>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-success" id="addTelefone">Adicionar Telefone</button>
+                        </div>
+                    </div>
+                }
+            </form>
+        </div>
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Salvar" class="btn btn-default" />
+        <a asp-action="Index">Voltar</a>
+    </div>
+
+
+
+
+@section Scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var telefoneIndex = 1;
+
+            // Adicionar novo telefone
+            $('#addTelefone').click(function () {
+                var telefoneHtml = `
+                    <div class="telefoneItem">
+                        <input class="form-control" name="Telefone[` + telefoneIndex + `].Numero" placeholder="Número do telefone" type="text">
+                        <button type="button" class="btn btn-danger removeTelefone">Remover</button>
+                    </div>
+                `;
+                $('#telefonesContainer').append(telefoneHtml);
+                telefoneIndex++;
+            });
+
+            // Remover telefone
+            $(document).on('click', '.removeTelefone', function () {
+                $(this).closest('.telefoneItem').remove();
+            });
+        });
+    </script>
+}
