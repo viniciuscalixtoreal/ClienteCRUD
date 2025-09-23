@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace ClienteCRUD.Services
 {
-    public class ClienteService
+    public class ClienteService : IClienteService
     {
         private readonly ClienteRepository _repository;
         private readonly IDatabase _redis;
@@ -39,26 +39,43 @@ namespace ClienteCRUD.Services
 
         public void Salvar(Cliente cliente)
         {
-            var tel = cliente.Telefones;
+            var telefones = cliente.Telefones;
             var key = $"cliente:{cliente.Id}";
 
             if (cliente.Id == 0)
             {
-                var cli = new Cliente { Nome = cliente.Nome, Endereco = cliente.Endereco, Sexo = cliente.Sexo };
-                cliente = _repository.Salvar(cli);
-
-                foreach (var item in tel)
+                var novoCliente = new Cliente
                 {
-                    item.Cliente = cliente;
-                    item.Ativo = true;
+                    Nome = cliente.Nome,
+                    Endereco = cliente.Endereco,
+                    Sexo = cliente.Sexo
+                };
+
+                novoCliente = _repository.Salvar(novoCliente);
+
+                foreach (var telefone in telefones)
+                {
+                    if (!string.IsNullOrWhiteSpace(telefone.Numero))
+                    {
+                        telefone.Cliente = novoCliente;
+                        telefone.Ativo = true;
+                        telefone.ClienteId = novoCliente.Id;
+                    }
                 }
 
-                cliente.Telefones = tel;
-                _repository.Salvar(cliente);
-                _redis.StringSet(key, JsonConvert.SerializeObject(cliente));
+                novoCliente.Telefones = telefones;
+
+                _repository.Salvar(novoCliente);
+                _redis.StringSet($"cliente:{novoCliente.Id}", JsonConvert.SerializeObject(novoCliente));
             }
             else
             {
+                foreach (var telefone in cliente.Telefones)
+                {
+                    telefone.Cliente = cliente;
+                    telefone.ClienteId = cliente.Id;
+                }
+
                 _repository.Salvar(cliente);
                 _redis.StringSet(key, JsonConvert.SerializeObject(cliente));
             }

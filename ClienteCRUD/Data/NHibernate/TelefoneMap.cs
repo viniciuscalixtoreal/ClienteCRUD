@@ -10,7 +10,7 @@ namespace ClienteCRUD.Data.NHibernate
             Table("Telefones");
             Id(x => x.Id).GeneratedBy.Identity();
             Map(x => x.Numero)
-                .Not.Nullable()
+                .Nullable()
                 .Length(15);
             Map(x => x.Ativo);
 

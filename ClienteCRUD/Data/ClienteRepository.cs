@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace ClienteCRUD.Data
 {
-    public class ClienteRepository
+    public class ClienteRepository : IClienteRepository
     {
         public List<Cliente> ObterTodos()
         {

@@ -8,34 +8,46 @@
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    <div>
-        @Html.LabelFor(m => m.Nome)
-        @Html.TextBoxFor(m => m.Nome)
-    </div>
-    <div>
-        @Html.LabelFor(m => m.Sexo)
-        @Html.DropDownListFor(m => m.Sexo, new SelectList(new[] { "Masculino", "Feminino", "Outro" }))
-    </div>
-    <div>
-        @Html.LabelFor(m => m.Endereco)
-        @Html.TextBoxFor(m => m.Endereco)
-    </div>
+
+    <!-- Campo Nome -->
     <div class="form-group">
-        <label class="control-label col-md-2">Telefone</label>
-        <div class="col-md-10">
-            <div id="telefonesContainer">
-                <div class="telefoneItem">
-                    @Html.TextBoxFor(model => model.Telefones[0].Numero, new { @class = "form-control", placeholder = "Número do telefone" })
-                    <button type="button" class="btn btn-danger removeTelefone">Remover</button>
-                </div>
-            </div>
-            <button type="button" class="btn btn-success" id="addTelefone">Adicionar Telefone</button>
-        </div>
+        <label asp-for="Nome" class="control-label"></label>
+        <input asp-for="Nome" class="form-control" />
+        <span asp-validation-for="Nome" class="text-danger"></span>
     </div>
-    <button type="submit">Salvar</button>
+
+    <!-- Campo Sexo -->
+    <div class="form-group">
+        <label asp-for="Sexo" class="control-label"></label>
+        <select asp-for="Sexo" class="form-control" asp-items="@(new SelectList(new List<string> { "Masculino", "Feminino", "Outro" }))"></select>
+        <span asp-validation-for="Sexo" class="text-danger"></span>
+    </div>
+
+    <!-- Campo Endereço -->
+    <div class="form-group">
+        <label asp-for="Endereco" class="control-label"></label>
+        <input asp-for="Endereco" class="form-control" />
+        <span asp-validation-for="Endereco" class="text-danger"></span>
+    </div>
+
+    <!-- Campo Telefones -->
+    <div class="form-group">
+        <label class="control-label">Telefone</label>
+        <div id="telefonesContainer">
+            <div class="telefoneItem">
+                @Html.TextBoxFor(model => model.Telefones[0].Numero, new { @class = "form-control", placeholder = "Número do telefone" })
+                <button type="button" class="btn btn-danger removeTelefone">Remover</button>
+            </div>
+        </div>
+        <button type="button" class="btn btn-success" id="addTelefone">Adicionar Telefone</button>
+    </div>
+
+    <!-- Botões de Ação -->
+    <div class="form-group">
+        <input type="submit" value="Salvar" class="btn btn-primary" />
+        <a asp-action="Index" class="btn btn-secondary">Voltar</a>
+    </div>
 }
-
-
 
 @section Scripts {
     <script type="text/javascript">

@@ -70,12 +70,6 @@ namespace ClienteCRUD.Controllers
             if (cliente is null)
                 return NotFound();
 
-            return View(cliente);
-        }
-
-        [HttpPost, ActionName("Delete")]
-        public IActionResult DeleteConfirmed(int id)
-        {
             _service.Deletar(id);
             return RedirectToAction(nameof(Index));
         }

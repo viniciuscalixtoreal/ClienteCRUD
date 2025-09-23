@@ -5,30 +5,18 @@
 
 <h2>Clientes</h2>
 
-@* <a href="@Url.Action("Create")">Novo Cliente</a> *@
-<a asp-action="Create" class="btn btn-default">Novo Cliente</a>
+<a asp-action="Create" class="btn btn-primary mb-3">Novo Cliente</a>
+<p/>
 
-<table class="table table-striped table-hover">
-    <thead>
-        <tr class="success">
-            <th>
-                Id
-            </th>
-            <th>
-                Nome
-            </th>
-            <th>
-                Sexo
-            </th>
-            <th>
-                Endereço
-            </th>
-            <th>
-                Telefone
-            </th>
-            <th>
-                Ações
-            </th>
+<table class="table table-striped table-hover table-bordered">
+    <thead class="table-success">
+        <tr>
+            <th>Id</th>
+            <th>Nome</th>
+            <th>Sexo</th>
+            <th>Endereço</th>
+            <th>Telefone</th>
+            <th>Ações</th>
         </tr>
     </thead>
     <tbody>
@@ -39,19 +27,44 @@
                 <td>@item.Nome</td>
                 <td>@item.Sexo</td>
                 <td>@item.Endereco</td>
-                @foreach (var tel in item.Telefones)
-                {
-                    @if (tel.Ativo)
-                    {
-                        <td>@tel.Numero</td>
-                    }
-                }
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Editar</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Detalhes</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Excluir</a>
+                    @if (item.Telefones != null && item.Telefones.Any(t => t.Ativo))
+                    {
+                @string.Join(", ", item.Telefones
+                                .Where(t => t.Ativo)
+                                .Select(t => t.Numero))
+                                }
+                    else
+                    {
+                        <span class="text-muted">Sem telefone</span>
+                    }
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Editar</a>
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info">Detalhes</a>
+                    <button class="btn btn-sm btn-danger btn-excluir" data-id="@item.Id" data-nome="@item.Nome">Excluir</button>
                 </td>
             </tr>
         }
     </tbody>
 </table>
+
+
+
+
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $(".btn-excluir").click(function () {
+                var id = $(this).data("id");
+                var nome = $(this).data("nome");
+
+                if (confirm("Tem certeza que deseja excluir o cliente '" + nome + "'?")) {
+                    window.location.href = '/Clientes/Delete/' + id;
+                }
+            });
+        });
+    </script>
+}

@@ -15,7 +15,7 @@ namespace ClienteCRUD.Data.NHibernate
                 {
                     _sessionFactory = Fluently.Configure()
                         .Database(MsSqlConfiguration.MsSql2012
-                            .ConnectionString("Data Source=DESKTOP-H066QAM\\SQLEXPRESS; Initial Catalog=DataBase; Integrated Security=True; TrustServerCertificate=True"))
+                            .ConnectionString("Data Source=DESK-VINICIUS; Initial Catalog=DataBase; Integrated Security=True; TrustServerCertificate=True"))
                         .Mappings(m => m.FluentMappings.AddFromAssemblyOf<ClienteMap>())
                         .BuildSessionFactory();
                 }
