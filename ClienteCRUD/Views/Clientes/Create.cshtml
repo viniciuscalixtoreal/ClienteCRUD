@@ -9,28 +9,24 @@
 {
     @Html.AntiForgeryToken()
 
-    <!-- Campo Nome -->
     <div class="form-group">
         <label asp-for="Nome" class="control-label"></label>
         <input asp-for="Nome" class="form-control" />
         <span asp-validation-for="Nome" class="text-danger"></span>
     </div>
 
-    <!-- Campo Sexo -->
     <div class="form-group">
         <label asp-for="Sexo" class="control-label"></label>
         <select asp-for="Sexo" class="form-control" asp-items="@(new SelectList(new List<string> { "Masculino", "Feminino", "Outro" }))"></select>
         <span asp-validation-for="Sexo" class="text-danger"></span>
     </div>
 
-    <!-- Campo Endereço -->
     <div class="form-group">
         <label asp-for="Endereco" class="control-label"></label>
         <input asp-for="Endereco" class="form-control" />
         <span asp-validation-for="Endereco" class="text-danger"></span>
     </div>
 
-    <!-- Campo Telefones -->
     <div class="form-group">
         <label class="control-label">Telefone</label>
         <div id="telefonesContainer">
@@ -42,7 +38,6 @@
         <button type="button" class="btn btn-success" id="addTelefone">Adicionar Telefone</button>
     </div>
 
-    <!-- Botões de Ação -->
     <div class="form-group">
         <input type="submit" value="Salvar" class="btn btn-primary" />
         <a asp-action="Index" class="btn btn-secondary">Voltar</a>
@@ -54,7 +49,6 @@
         $(document).ready(function () {
             var telefoneIndex = 1;
 
-            // Adicionar novo telefone
             $('#addTelefone').click(function () {
                 var telefoneHtml = `
                     <div class="telefoneItem">
@@ -66,7 +60,6 @@
                 telefoneIndex++;
             });
 
-            // Remover telefone
             $(document).on('click', '.removeTelefone', function () {
                 $(this).closest('.telefoneItem').remove();
             });
