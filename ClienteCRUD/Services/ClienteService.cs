@@ -3,6 +3,7 @@ using ClienteCRUD.Models;
 using Newtonsoft.Json;
 using StackExchange.Redis;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ClienteCRUD.Services
 {
@@ -42,6 +43,8 @@ namespace ClienteCRUD.Services
             var telefones = cliente.Telefones;
             var key = $"cliente:{cliente.Id}";
 
+            var telAtivo = telefones.Where(t => t.ClienteId == cliente.Id && t.Ativo).Count();
+
             if (cliente.Id == 0)
             {
                 var novoCliente = new Cliente
@@ -57,6 +60,8 @@ namespace ClienteCRUD.Services
                 {
                     if (!string.IsNullOrWhiteSpace(telefone.Numero))
                     {
+                        if (telAtivo > 0)
+                            telefone.Ativo = false;
                         telefone.Cliente = novoCliente;
                         telefone.Ativo = true;
                         telefone.ClienteId = novoCliente.Id;
@@ -72,6 +77,9 @@ namespace ClienteCRUD.Services
             {
                 foreach (var telefone in cliente.Telefones)
                 {
+                    if (telAtivo < 0)
+                        telefone.Ativo = true;
+
                     telefone.Cliente = cliente;
                     telefone.ClienteId = cliente.Id;
                 }
