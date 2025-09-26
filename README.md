@@ -1,0 +1,1 @@
+Foi desenvolvida uma aplicação Asp.Net MVC com .Net Core 2.1, utilizando o ORM NHibernate como framework de acesso ao banco de dados, que se trata do SQL Server. Também foi implementado a ferramenta para cache Redis, onde otimiza as consultas. Para o acesso ao Redis, foi utilizado uma imagem de um contêiner Docker, onde já estava pronto um ambiente virtual para acessar o Redis.
